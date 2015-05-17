@@ -167,7 +167,7 @@ var YAAW = (function() {
           indexes.push(n.getAttribute("data-index"));
         });
         if (indexes.length == 0) {
-          ARIA2.main_alert("alert-error", "At least one file should be selected. Or just stop the task.", 5000);
+          ARIA2.main_alert("alert-error", "至少一个文件需被选中", 5000);
         } else {
           var options = {
             "select-file": indexes.join(","),
@@ -249,10 +249,10 @@ var YAAW = (function() {
         var appcache = window.applicationCache;
         $(document).ready(function() {
           if (appcache.status == appcache.IDLE)
-            $("#offline-cached").text("cached");
+            $("#offline-cached").text("已缓存");
         });
         appcache.addEventListener("cached", function(){
-          $("#offline-cached").text("cached");
+          $("#offline-cached").text("已缓存");
         });
       }
     },
@@ -397,7 +397,23 @@ var YAAW = (function() {
             }
           };
         },
-
+		
+		format_date: function() {
+		   var startyear = 1970;
+		   var startmonth = 1;
+		   var startday = 1;
+		   var d, s;
+		   var sep = ":";
+		   return function format_date(time) {
+		     time = Math.floor(time);
+		     d = new Date();
+		     d.setFullYear(startyear,startmonth,startday);
+		     d.setTime(0);
+		     d.setSeconds(time);
+			 return d.toLocaleString();
+		   };
+		},
+		
         format_time: function() {
           var time_interval = [60, 60, 24];
           var time_text = ["s", "m", "h"];
@@ -444,36 +460,36 @@ var YAAW = (function() {
         error_msg: function() {
           var error_code_map = {
             0: "",
-            1: "unknown error occurred.",
-            2: "time out occurred.",
-            3: "resource was not found.",
-            4: "resource was not found. See --max-file-not-found option.",
-            5: "resource was not found. See --lowest-speed-limit option.",
-            6: "network problem occurred.",
-            7: "unfinished download.",
-            8: "remote server did not support resume when resume was required to complete download.",
-            9: "there was not enough disk space available.",
-            10: "piece length was different from one in .aria2 control file. See --allow-piece-length-change option.",
-            11: "aria2 was downloading same file at that moment.",
-            12: "aria2 was downloading same info hash torrent at that moment.",
-            13: "file already existed. See --allow-overwrite option.",
-            14: "renaming file failed. See --auto-file-renaming option.",
-            15: "aria2 could not open existing file.",
-            16: "aria2 could not create new file or truncate existing file.",
-            17: "I/O error occurred.",
-            18: "aria2 could not create directory.",
-            19: "name resolution failed.",
-            20: "could not parse Metalink document.",
-            21: "FTP command failed.",
-            22: "HTTP response header was bad or unexpected.",
-            23: "too many redirections occurred.",
-            24: "HTTP authorization failed.",
-            25: "aria2 could not parse bencoded file(usually .torrent file).",
-            26: ".torrent file was corrupted or missing information that aria2 needed.",
-            27: "Magnet URI was bad.",
-            28: "bad/unrecognized option was given or unexpected option argument was given.",
-            29: "the remote server was unable to handle the request due to a temporary overloading or maintenance.",
-            30: "aria2 could not parse JSON-RPC request.",
+            1: "未知错误",
+            2: "连接超时",
+            3: "资源未找到",
+            4: "资源未找到，详见 --max-file-not-found 选项",
+            5: "资源未找到，详见 --lowest-speed-limit 选项",
+            6: "网络错误",
+            7: "未完成的下载",
+            8: "远程服务器不支持暂停",
+            9: "本地磁盘空间不足",
+            10: "分块大小不符合 .aria2 控制文件设置，详见 --allow-piece-length-change 选项",
+            11: "aria2 正在下载相同的文件名",
+            12: "aria2 正在下载相同哈希值的种子",
+            13: "文件已存在，详见 --allow-overwrite 选项",
+            14: "重命名文件失败，详见 --auto-file-renaming 选项",
+            15: "aria2 不能访问已存在的文件",
+            16: "aria2 不能新建文件或者删除已存在的文件",
+            17: "I/O 错误",
+            18: "aria2 不能创建目录",
+            19: "名称解析失败",
+            20: "不能解析磁链文件",
+            21: "FTP 指令失败",
+            22: "错误或位置 HTTP 响应头",
+            23: "过多的重定向",
+            24: "HTTP 认证失败",
+            25: "aria2 不能解析 bencode 文件(.torrent 文件).",
+            26: ".torrent 已损坏或缺失 aria2 需要的信息",
+            27: "错误的磁链地址",
+            28: "错误或者未识别的的选项",
+            29: "远程服务器因维护或过载无法响应请求",
+            30: "aria2 无法解析 JSON-RPC 请求",
           };
           return function(text) {
             return error_code_map[text] || "";
